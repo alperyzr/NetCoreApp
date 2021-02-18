@@ -9,7 +9,7 @@ namespace AuthServer.Core.Configuration
         public string Id { get; set; }
         public string Secret { get; set; }
      
-        //wwww.myapi1.com örnek sitesine erişebilir
+        //wwww.myapi1.com örnek sitesine erişebilir 
         public List<string> Audiences { get; set; }
 
     }
