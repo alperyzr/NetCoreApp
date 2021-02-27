@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace AuthServer.Core.Repositories
 {
+    //Ortak CRUD işlemlerin interface methodları
     public interface IGenericRepository<TEntity>where TEntity:class
     {
         Task<TEntity> GetByIdAsync(int id);
