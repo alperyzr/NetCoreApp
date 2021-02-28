@@ -6,7 +6,7 @@ namespace AuthServer.Core.DTOs
 {
    public class ClientTokenDto
     {
-        public string AccesToken { get; set; }
+        public string AccessToken { get; set; }
         public DateTime AccessTokenExpiration { get; set; }
 
     }

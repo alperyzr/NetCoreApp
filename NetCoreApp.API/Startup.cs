@@ -1,3 +1,4 @@
+using AuthServer.Core.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,7 +30,7 @@ namespace NetCoreApp.API
         {
             //CustomtokenOption classýna mapplemek için kullanýlýr
             services.Configure<CustomTokenOption>(Configuration.GetSection("TokenOption"));
-
+            services.Configure<Client>(Configuration.GetSection("Clients"));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

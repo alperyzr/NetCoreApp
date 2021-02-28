@@ -11,6 +11,7 @@ namespace AuthServer.Data.Configirations
     {
         public void Configure(EntityTypeBuilder<UserApp> builder)
         {
+            //City alanı Maximum 50 Karakter olacak
             builder.Property(x => x.City).HasMaxLength(50);
         }
     }
