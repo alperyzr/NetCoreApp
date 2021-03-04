@@ -17,7 +17,7 @@ using System.Text;
 namespace AuthServer.Service.Services
 {
     //Core Katmanındaki IAuthenticationService bu token kısmını kullanıcak
-    class TokenService : ITokenService
+   public class TokenService : ITokenService
     {
         //Kullanıcı ile işlem yapılacağı için Kullanıcı çekilir
         private readonly UserManager<UserApp> _userManager;
