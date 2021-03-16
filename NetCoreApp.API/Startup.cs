@@ -6,6 +6,7 @@ using AuthServer.Core.UnitOfWork;
 using AuthServer.Data;
 using AuthServer.Data.Repositories;
 using AuthServer.Service.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -74,7 +75,43 @@ namespace NetCoreApp.API
 
             //CustomtokenOption classýna mapplemek için kullanýlýr
             services.Configure<CustomTokenOption>(Configuration.GetSection("TokenOption"));
+           
+
             services.Configure<List<Client>>(Configuration.GetSection("Clients"));
+
+            //Authentication kýsmý için kullanýlýr. Birden fazla Authentication gerektiren sistemlerde mevcuttur.
+            //O zaman AuthenticationSheme yerine istediðimiz string adda belirtebiliriz.
+            //Örnek olarak hem müþteri login ekraný hemde bayiler için farklý giriþ ekraný ve Authentication iþlemi kullandýðýmýz zamanlarda string ile belirtebilirz.
+            services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                //Elimizdeki iki þemayý burda birbiri ile konuþturuyoruz.
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts=> 
+            {
+                //servise.Add diyerek eklemiþ bir nesneden instance almka için kullanýlýr.
+                var tokenOptions = Configuration.GetSection("TokenOption").Get<CustomTokenOption>();
+                opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                {
+                    //NetCoreApp' taki appsettings.json dosyasýndaki alanlar ilgili alanlara setlenir
+                    ValidIssuer = tokenOptions.Issuer,
+
+                    //Token'daki Audince dizi olduðu için sýfýrýncý indis'ten instance aldýk
+                    ValidAudience = tokenOptions.Audience[0],
+                    IssuerSigningKey = SingService.GetSymmetricSecuriyKey(tokenOptions.SecurityKey),
+
+                    //Issuer Ýmzasý Doðrulanýr
+                    ValidateIssuerSigningKey = true,//imzayý doðrular
+                    ValidateAudience = true,//Audice doðrular
+                    ValidateIssuer = true,//Issuer doðrular
+                    ValidateLifetime = true,//Token Ömrünü kontrol eder
+                    
+                    //Token ömrüne otomatik olarak verilen sürenin 5dk fazlasýný verir. Zero komutu o 5dk lýk default süreyi kaldýrýr.
+                    //Ýsteðe baðlý olarak eklenir.
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

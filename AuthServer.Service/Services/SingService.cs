@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AuthServer.Service.Services
 {
-    internal static class SingService
+    public static class SingService
     {
         public static SecurityKey GetSymmetricSecuriyKey(string securityKey)
         {
