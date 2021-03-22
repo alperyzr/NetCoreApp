@@ -46,8 +46,9 @@ namespace NetCoreApp.API
             //Generic olduklarý için typeof kullanarak eklenmelidir
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-            //IserviceGeneric 2 tane generic arametre aldýðý için <> arasýna virgül koyuyoruz
-            services.AddScoped(typeof(IGenericService<,>), typeof(IGenericService<,>));
+            //IGenericService 2 tane generic parametre aldýðý için <> arasýna virgül koyuyoruz.
+            //Aldýðý parametre sayýsýnýn bir eksiði kadar virgül koymamýz gerekir
+            services.AddScoped(typeof(IGenericService<,>), typeof(GenericService<,>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             //DBContext alanlarýný eklemek
