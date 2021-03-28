@@ -129,13 +129,22 @@ namespace NetCoreApp.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "NetCoreApp.API v1"));
             }
+            //**** Sýralama Önemli *****
 
+            //önce HttpS gönderilir
             app.UseHttpsRedirection();
 
+            //Routlama yapýlýr
             app.UseRouting();
 
+            //Authentication yapýlýr
+            app.UseAuthentication();
+
+            //Authorization yapýlýr
             app.UseAuthorization();
 
+
+            //EndPoint mapleme yapýlacak þekilde sýralama ayarlanmalýdr. 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
