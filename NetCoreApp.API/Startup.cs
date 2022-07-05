@@ -6,6 +6,7 @@ using AuthServer.Core.UnitOfWork;
 using AuthServer.Data;
 using AuthServer.Data.Repositories;
 using AuthServer.Service.Services;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,6 +20,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using SharedLibrary.Configuration;
+using SharedLibrary.Extensions;
 using SharedLibrary.Services;
 using System;
 using System.Collections.Generic;
@@ -114,7 +116,17 @@ namespace NetCoreApp.API
                 };
             });
 
-            services.AddControllers();
+
+            //services.AddControllers();
+            //****** FluentVAlidation Kullandýðýmýz için kullanýmý böyle olmalýdýr
+            services.AddControllers().AddFluentValidation(option =>
+            {
+                option.RegisterValidatorsFromAssemblyContaining<Startup>();//Startup altýnda tüm AbstractValidator den türeyen classlar için çalýþýr
+            });
+
+            //FluentValitaion ile birlikte default dönen hatalar yerine, dönmesini istediðimiz errorDtor extension classý
+            services.UseCustomValidationResponse();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NetCoreApp.API", Version = "v1" });
@@ -129,6 +141,12 @@ namespace NetCoreApp.API
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "NetCoreApp.API v1"));
+            }
+            else
+            {
+                //Production ortamýnda bu arzda çalýþsýn, kod yazarken hatayý kod ekranýnda göstersin diye else kýsmýna yazýldý
+                //Hata midleware larý her zaman üste yazýlmalýdýr ki, hata varsa altaki middlewarelere girmesin
+                app.UseCustomException();
             }
             //**** Sýralama Önemli *****
 

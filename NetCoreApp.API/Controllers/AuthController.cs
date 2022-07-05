@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace NetCoreApp.API.Controllers
 {
     //Route Yapısı
-    [Route("api/[controller]/[action]")]
+    [Route("[controller]/[action]")]
     [ApiController]
     public class AuthController : CustomBaseController//CustomBaseControoler' dan türeyip direk statüs kod döndürmesi için generic sınıf
     {
@@ -25,6 +25,11 @@ namespace NetCoreApp.API.Controllers
         //Yukarıdaki Route yapısına göre ulaşmak için
         //api/controller/action olarak yazdığımızda ilgili actiona gidecektir
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("/auth/createToken")]
         public async Task<IActionResult> CreateToken(LoginDto loginDto)
         {
             var result = await _authenticationService.CreateTokenAsync(loginDto);

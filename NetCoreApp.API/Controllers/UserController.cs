@@ -3,6 +3,7 @@ using AuthServer.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SharedLibrary.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace NetCoreApp.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserDto createUserDto)
         {
-            
+           
             return ActionResultInstance(await _userService.CreateUserAsync(createUserDto));
         }
 
