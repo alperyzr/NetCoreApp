@@ -26,6 +26,7 @@ namespace NetCoreApp.API.Validations
     //        builder.Property(x => x.UserName).IsRequired();
     //        builder.Property(x => x.Password).HasColumnType("decimal(18,4)");
     //        builder.Property(x => x.Email).IsRequired();
+    //        builder.HasMany(x=>x.Accounts).WithOne(x=>x.ApplicationUser).HasForeignKey(x=>x.ApplicationUserId);
 
     //    }
     //}
